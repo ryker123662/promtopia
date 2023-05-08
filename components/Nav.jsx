@@ -6,7 +6,7 @@ import { useState, useEffect } from "react";
 import { signIn, signOut, useSession, getProviders } from "next-auth/react";
 
 const Nav = () => {
-	const isUserLoggedIn = true;
+	const { data: session } = useSession();
 
 	const [providers, setProviders] = useState(null);
 	const [toggleDropdown, setToggleDropdown] = useState(false);
@@ -25,8 +25,8 @@ const Nav = () => {
 				className="flex gap-2 flex-center"
 			>
 				<Image
-					className="object-contain"
 					src="/assets/images/logo.svg"
+					className="object-contain"
 					width={30}
 					height={30}
 					alt="Promptopia Logo"
@@ -36,7 +36,7 @@ const Nav = () => {
 
 			{/* Desktop nav */}
 			<div className="sm:flex hidden">
-				{isUserLoggedIn ? (
+				{session?.user ? (
 					<div className="flex gap-3 md:gap-5">
 						<Link
 							href="/create-prompt"
@@ -55,7 +55,7 @@ const Nav = () => {
 
 						<Link href="/profile">
 							<Image
-								src="/assets/images/logo.svg"
+								src={session?.user.image}
 								width={37}
 								height={37}
 								alt="Profile Picture"
@@ -84,17 +84,17 @@ const Nav = () => {
 
 			{/* Mobile nav */}
 			<div className="sm:hidden flex relative">
-				{isUserLoggedIn ? (
+				{session?.user ? (
 					<div className="flex">
 						<Image
-							src="/assets/images/logo.svg"
+							src={session?.user.image}
 							width={37}
 							height={37}
-							alt="Profile Picture"
 							className="rounded-full"
+							alt="profile"
 							onClick={() => {
-								setToggleDropdown(!toggleDropdown);
-								// setToggleDropdown((prevState) => !prevState);
+								// setToggleDropdown(!toggleDropdown);
+								setToggleDropdown((prevState) => !prevState);
 							}}
 						/>
 
